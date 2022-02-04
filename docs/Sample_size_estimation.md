@@ -15,7 +15,7 @@ This approach uses a [web based calculator](https://wnarifin.github.io/ssc/sskap
 1. Selecting a method of calculation: Hypothesis Testing
 2. Selecting parameters:
    1. Minimum acceptable Kappa was set to be 0.6 (based on the [reference article](https://doi.org/10.21315/eimj2018.10.3.8)).
-   2. Expected Kappa values were tested for 0.6, 0.7, 0.8 based on the levels of agreement. A value of 0.8 was selected denoting a strong agreement.
+   2. Expected Kappa values were tested for 0.70, 0.75, 0.80 based on the levels of agreement. A value of 0.80 was selected denoting a strong agreement.
    3. Proportion of outcome was set to be 0.5 (accounting for 50% of either category, in our case, Definitely relevant and Partially relevant).
    4. Significance level was set to be  0.05 following a Two-tailed hypothesis test.
    5. Power was set to be 80% to account for the standard error based on the [conventional level of power](http://www.stat.columbia.edu/~gelman/stuff_for_blog/chap20.pdf).
@@ -25,8 +25,17 @@ This approach uses a [web based calculator](https://wnarifin.github.io/ssc/sskap
    2. Sample size (n<sub>drop</sub>) : Total number of articles that should be assessed in order to obtain n evaluable articles.
 
 
+## Results
+
+| Expected Kappa values | Sample size (n) | Sample size (n<sub>drop</sub>) | Level of agreement |
+| :--------------------:|:---------------:|:------------------------------:| :-----------------:|
+|         0.70          |     503         |        559                     | Fair               |
+|         0.75          |     224         |        249                     | Moderate           |
+|         0.80          |     126         |        140                     | Strong             |
 
 
+
+We use the sample size (n) and  (n<sub>drop</sub>) values to be 126 and 140 respectively indicating a strong interrater reliability.
 
 
 
