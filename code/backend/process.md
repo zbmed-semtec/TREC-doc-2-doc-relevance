@@ -41,6 +41,7 @@ For the user interface, we will need title and abstract for all reference and to
 
 ## Relevance assessment user interface
 Here we describe at a high level the user interface used by annotators to produce the relevance assessment using as input the topic_reference_and_documents.tsv file
+- Each annotator will use a copy of the topic_reference_and_documents.tsv file as they will add information corresponding to the relevance assessment that will be saved in a fourth column. This column can only have 2, 1 or 0 as possible values or being empty.
 - Each annotator will be given a login and password details that will be kept encrypted. At this point, we do not need something too elaborated so features such as recovering and changing the password are nice to have but not a must.
 - We need the relevance assessmente to be roughly coordinated across different annotators so we will present them with the relevance assessment tasks in the order of the file. Once an annotator enters the interface, the system presents a relevance assesment task for one reference PMID only
   - The reference PMID is the first one in the file that has not been yet done/fully processed
@@ -49,3 +50,4 @@ Here we describe at a high level the user interface used by annotators to produc
   - The relevance assessments should not be modified once they have entered but we will allowed edition in case of mistyping
   - Once all of the to-be-assessed documents for the displayed reference document have been assessed (all of the assessment text box have a value), the annotator will mark the task as done/fully processed for that reference document. The system will record the reference document as done/fully processed
   - The system will present the next not done/fully processed reference document to the annotator
+  - The relevance assessments are saved in a new column. At a point, only those reference documents that are done/fully processed will have a value in this column
