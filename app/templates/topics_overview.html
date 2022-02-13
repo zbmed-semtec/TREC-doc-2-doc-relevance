@@ -47,10 +47,17 @@
 			<div class="row">
 				<div class="col-12" id=form style="border-style:solid; border-color: #ee7f00; border-radius:0.5em; margin:auto; padding: .8em; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
 						<p align="center"><em><strong>List of {{ topicsList | length }} Topics</strong></em></p>
+						<table class="table">
+							<thead class="thead-dark">
+								<tr>
+									<th scope="col">Topic-ID</th>
+									<th scope="col">Description</th>
+								</tr>
+							</thead>
 						{%for topic_id in topicsList%}
-						<div class="list-group">
-							<a href="/{{ topic_id }}" class="list-group-item list-group-item-action">{{ topic_id }}: {{ topics.at[topic_id, 'desc'] }}</a>
-						</div>
+						<tr>
+							<td colspan="2"><a href="/{{ topic_id }}" class="list-group-item list-group-item-action">{{ topic_id }} {{ topics.at[topic_id, 'desc'] }}</a></td>
+						</tr>
 						{%endfor%}
 				</div>
 		</div>
