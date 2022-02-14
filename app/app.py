@@ -24,7 +24,11 @@ def topic(topic_id):
         topic_description = topics['desc'][topics['id']==str(topic_id)].reset_index(drop=True)
         topic_desc = topic_description[0]
         article_list = ref_documents['PMID reference document'][ref_documents['TREC topic'] == topic_id]
-        article_list = set(article_list)
+        article_list = list(set(article_list))
+        # Check if article is in Trec Corpus and drop if not
+        for article in article_list:
+                if article not in list(set(TREC_corpus.index.values.tolist())):
+                        article_list.remove(article)
         return render_template('topic.html', topic=topic_desc, topic_id = topic_id, article_list=article_list, TREC_corpus = TREC_corpus)
 
 
@@ -37,14 +41,10 @@ def ref_article(pmid, topic_id):
         docList = list(docSet)
         ref_title = TREC_corpus.at[pmid, 'title']
         ref_abstract = TREC_corpus.at[pmid, 'abstract']
+        # Check if article is in Trec Corpus and drop if not
         for article in docList:
-                try:
-                        article_id = TREC_corpus[TREC_corpus['PMID'] == article].index[0]
-                except:
-                        article_id = 'False'
-                        pass
-                if not article_id:
-                        docList = docList.drop(article)
+                if article not in list(set(TREC_corpus.index.values.tolist())):
+                        docList.remove(article)
         
         return render_template('ref_article.html', topic=topic_desc, topic_id=topic_id, pmid=pmid, title=ref_title, abstract=ref_abstract, article_list=docList, TREC_corpus = TREC_corpus)
 
