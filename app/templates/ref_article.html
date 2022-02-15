@@ -50,21 +50,30 @@
 			</div>
 		<div class="container" style="margin-top:1.5em; padding: .5em;">
 			<div class="row justify-content-start">
-				<div class="col-8" style="border-style: solid; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; padding: .8em; margin-top: 1em; margin-bottom: auto; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
+				<div class="col-12" style="border-style: solid; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; padding: .8em; margin-top: 1em; margin-bottom: auto; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
 					<h1>Reference Article</h1>
                     <h3 align="justify"><b>Title:</b> {{ title }}</h3>
 					<p style="margin-top: 15px;" align="justify"><b>Abstract:</b> {{ abstract }}
 				</div>
-				<div class="col-2 offset-1" style="border-style:solid; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; padding: .8em; margin-top: 1em; margin-bottom: auto; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
+			</div>
+			<div class="row justify-content-start">
+				<div class="col-12" style="border-style:solid; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; padding: .8em; margin-top: 1em; margin-bottom: auto; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
 					<p align="center"><em><strong>Please assess the following articles:</strong></em></p>
-					<div class="list-group">
-								{%for article in article_list%} 
-								{%if submitted  %} <!-- in case this article was already evaluated-->
-								<a href="/{{ topic_id }}/{{ pmid }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-success"><center>{{ article }}</center></a>
-								{%else%}
-								<a href="/{{ topic_id }}/{{ pmid }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-warning"><center>{{ article }}</center></a>
-								{%endif%}
+					<div class="box">
+								{%for article_sublist in article_list%}
+								<div class="list-group list-group-horizontal">
+									{%for article in article_sublist%}
+								
+									{%if submitted  %} <!-- in case this article was already evaluated-->
+									<a href="/{{ topic_id }}/{{ pmid }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-success"><center>{{ article }}</center></a></li>
+									{%else%}
+									<a href="/{{ topic_id }}/{{ pmid }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-warning"><center>{{ article }}</center></a></li>
+									{%endif%}
+								
+									{%endfor%}
+								</div>
 								{%endfor%}
+					</div>
 					</div>
 				</div>
 			</div>
