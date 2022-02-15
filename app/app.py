@@ -63,10 +63,10 @@ def assessment_article(pmid, ref_pmid, topic_id):
         index_active = docList.index(pmid)
         index_previous = index_active - 1
         index_next = index_active + 1
-        percent_complete =round(((index_active)/n_articles)*100)
+        percent_complete =round(((index_active+1)/n_articles)*100)
         article_title = TREC_corpus.at[pmid, 'title']
         article_abstract = TREC_corpus.at[pmid, 'abstract']
-        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid, article_list=docList, TREC_corpus = TREC_corpus, n_articles=n_articles, index_previous=index_previous, index_next=index_next, percent_complete=percent_complete)
+        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid, article_list=docList, TREC_corpus = TREC_corpus, n_articles=n_articles, index_active=index_active, index_previous=index_previous, index_next=index_next, percent_complete=percent_complete)
 
 @app.route("/login")
 def login():
