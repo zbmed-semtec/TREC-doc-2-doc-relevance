@@ -52,10 +52,18 @@
 			</div>
 		</div>
 		<div class="container" style="margin-top:1.5em; padding: .5em;">
-			<div class="row">
-			  	<div class="col-8" style="border-style: solid; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; padding: .8em; margin:auto; margin-top: 1em; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
+			<div class="row justify-content-start">
+				<div class="col-8" style="border-style: solid; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; padding: .8em; margin-top: 1em; margin-bottom: auto; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
+				  <h1>Reference Article</h1>
+					<h3 align="justify"><b>Title:</b> {{ TREC_corpus.at[ref_pmid, 'title'] }}</h3>
+					<p style="margin-top: 15px;" align="justify"><b>Abstract:</b> {{ TREC_corpus.at[ref_pmid, 'abstract'] }}</p>
+				</div>
+			  </div>
+			<div class="row justify-content-start">
+			  	<div class="col-8" style="border-style: solid; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; padding: .8em; margin-top: 1em; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
 					<h3 align="justify"><b>Title:</b> {{ title }}</h3>
-					<p style="margin-top: 15px;" align="justify"><b>Abstract:</b> {{ abstract }}</div>
+				 	<p style="margin-top: 15px;" align="justify"><b>Abstract:</b> {{ abstract }}</p>
+				</div>
 				<div class="col-3" id=form style="border-style:dashed; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; margin:auto; padding: .8em; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
 						<p align="center"><em><strong>How relevant is this article to the topic?</strong></em></p>
 						<!-- <form method="post" action="/"> -->
@@ -81,6 +89,7 @@
 						<!-- </form> -->
 				</div>
 		</div>
+	</div>
 	</main>
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
