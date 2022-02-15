@@ -41,6 +41,13 @@ a:hover{
     background-color: #cc0824;
     border-color: #cc0824;
 }
+.page-item .page-link{
+    color:#cc0824;
+    border-color:#cc0824;
+}
+.progress-bar{
+    background-color: #cc0824;
+}
 #form-mid {
     background-color: #ffff;
 }

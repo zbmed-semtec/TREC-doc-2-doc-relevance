@@ -34,14 +34,14 @@
                     <div class="box">
                         {%for article_sublist in article_list%}
                         <div class="list-group list-group-horizontal">
-                            {%for article in article_sublist%} {%if submitted %}
-                            <!-- in case this article was already evaluated-->
-                            <a href="/{{ topic_id }}/{{ pmid }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-success">
+                            {%for article in article_sublist%} 
+							{%if submitted %} <!-- in case this article was already evaluated-->
+                            <a href="/{{ topic_id }}/{{ ref_pmid }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-success">
                                 <center>{{ article }}</center>
                             </a>
                             </li>
                             {%else%}
-                            <a href="/{{ topic_id }}/{{ pmid }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-warning">
+                            <a href="/{{ topic_id }}/{{ ref_pmid }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-warning">
                                 <center>{{ article }}</center>
                             </a>
                             </li>

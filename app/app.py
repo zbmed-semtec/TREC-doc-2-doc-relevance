@@ -47,7 +47,7 @@ def ref_article(ref_pmid, topic_id):
                         docList.remove(article)
         docList_chunked = [docList[i:i + 4] for i in range(0, len(docList), 4)] 
         
-        return render_template('ref_article.html', topic=topic_desc, topic_id=topic_id, pmid=ref_pmid, title=ref_title, abstract=ref_abstract, article_list=docList_chunked, TREC_corpus = TREC_corpus)
+        return render_template('ref_article.html', topic=topic_desc, topic_id=topic_id, ref_pmid=ref_pmid, title=ref_title, abstract=ref_abstract, article_list=docList_chunked, TREC_corpus = TREC_corpus)
 
 @app.route('/<int:topic_id>/<int:ref_pmid>/<int:pmid>', methods=['GET', 'POST'])
 def assessment_article(pmid, ref_pmid, topic_id):
@@ -59,9 +59,14 @@ def assessment_article(pmid, ref_pmid, topic_id):
         for article in docList:
                 if article not in list(set(TREC_corpus.index.values.tolist())):
                         docList.remove(article)
+        n_articles = len(docList)
+        index_active = docList.index(pmid)
+        index_previous = index_active - 1
+        index_next = index_active + 1
+        percent_complete =round(((index_active)/n_articles)*100)
         article_title = TREC_corpus.at[pmid, 'title']
         article_abstract = TREC_corpus.at[pmid, 'abstract']
-        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid, article_list=docList, TREC_corpus = TREC_corpus)
+        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid, article_list=docList, TREC_corpus = TREC_corpus, n_articles=n_articles, index_previous=index_previous, index_next=index_next, percent_complete=percent_complete)
 
 @app.route("/login")
 def login():
