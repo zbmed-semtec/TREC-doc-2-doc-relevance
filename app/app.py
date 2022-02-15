@@ -32,29 +32,36 @@ def topic(topic_id):
         return render_template('topic.html', topic=topic_desc, topic_id = topic_id, article_list=article_list, TREC_corpus = TREC_corpus)
 
 
-@app.route('/<int:topic_id>/<int:pmid>', methods=['GET', 'POST'])
-def ref_article(pmid, topic_id):
+@app.route('/<int:topic_id>/<int:ref_pmid>', methods=['GET', 'POST'])
+def ref_article(ref_pmid, topic_id):
         topic_description = topics['desc'][topics['id']==str(topic_id)].reset_index(drop=True)
         topic_desc = topic_description[0]
-        documents_to_asses = ref_documents['PMID to be assessed'][ref_documents['PMID reference document']==pmid]
+        documents_to_asses = ref_documents['PMID to be assessed'][ref_documents['PMID reference document']==ref_pmid]
         docSet = set(documents_to_asses)
         docList = list(docSet)
-        ref_title = TREC_corpus.at[pmid, 'title']
-        ref_abstract = TREC_corpus.at[pmid, 'abstract']
+        ref_title = TREC_corpus.at[ref_pmid, 'title']
+        ref_abstract = TREC_corpus.at[ref_pmid, 'abstract']
         # Check if article is in Trec Corpus and drop if not
         for article in docList:
                 if article not in list(set(TREC_corpus.index.values.tolist())):
                         docList.remove(article)
+        docList_chunked = [docList[i:i + 4] for i in range(0, len(docList), 4)] 
         
-        return render_template('ref_article.html', topic=topic_desc, topic_id=topic_id, pmid=pmid, title=ref_title, abstract=ref_abstract, article_list=docList, TREC_corpus = TREC_corpus)
+        return render_template('ref_article.html', topic=topic_desc, topic_id=topic_id, pmid=ref_pmid, title=ref_title, abstract=ref_abstract, article_list=docList_chunked, TREC_corpus = TREC_corpus)
 
 @app.route('/<int:topic_id>/<int:ref_pmid>/<int:pmid>', methods=['GET', 'POST'])
 def assessment_article(pmid, ref_pmid, topic_id):
         topic_description = topics['desc'][topics['id']==str(topic_id)].reset_index(drop=True)
         topic_desc = topic_description[0]
+        documents_to_asses = ref_documents['PMID to be assessed'][ref_documents['PMID reference document']==ref_pmid]
+        docSet = set(documents_to_asses)
+        docList = list(docSet)
+        for article in docList:
+                if article not in list(set(TREC_corpus.index.values.tolist())):
+                        docList.remove(article)
         article_title = TREC_corpus.at[pmid, 'title']
         article_abstract = TREC_corpus.at[pmid, 'abstract']
-        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid)
+        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid, article_list=docList, TREC_corpus = TREC_corpus)
 
 @app.route("/login")
 def login():
