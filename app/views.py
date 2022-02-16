@@ -15,6 +15,9 @@ TREC_corpus['abstract'] = TREC_corpus['abstract'].astype('str')
 
 
 @views.route('/')
+def home_page():
+       return render_template('home_page.html') 
+
 @views.route('/topics')
 @login_required
 def topic_overview():
