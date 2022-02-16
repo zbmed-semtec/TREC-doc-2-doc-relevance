@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Login Page">
     <meta name="author" content="Tim Fellerhoff and Bootstrap contributors">
-    <title>ZB MED Login</title>
+    <title>ZB MED Sign Up</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">
 
@@ -41,30 +41,29 @@
 <body class="text-center">
 
     <main class="form-signin">
-        <form method="POST" action="/login">
+        <form method="POST" action="/signup">
             <a href="/"><img class="mb-4" src="{{ url_for('static', filename='/media/ZBMED17_e_cymk_cl_www.png') }}" alt=""></a>
 
             {% with messages = get_flashed_messages() %} {% if messages %}
             <div class="alert alert-warning" role="alert">
-                {{ messages[0] }}
+                {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
             </div>
             {% endif %} {% endwith %}
 
             <div class="form-floating">
-                <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
+                <input type="email" name="email" class="form-control" id="signupEmail" placeholder="name@example.com">
+                <label for="signupEmail">Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
-                <label for="floatingPassword">Password</label>
+                <input type="text" name="name" class="form-control" id="signupName" placeholder="name@example.com">
+                <label for="signupName">Name</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" id="signupPassword" placeholder="Password">
+                <label for="signupPassword">Password</label>
             </div>
 
-            <div class="checkbox mb-3">
-                <label>
-          <input type="checkbox" name="remember-me" value="remember-me"> Remember me
-        </label>
-            </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
             <p class="mt-5 mb-3 text-muted">&copy; ZB MED, Cologne 2020</p>
         </form>
     </main>

@@ -1,8 +1,9 @@
 import pandas as pd
 from flask import Blueprint, render_template, request
+from flask_login import login_required, current_user
 from . import db
 
-views = Blueprint('views', __name__, template_folder='templates')
+views = Blueprint('views', __name__)
 
 topics = pd.read_csv('data/output/test_adhoc2005narrative.tsv', sep='\t', header=0, names=['id', 'desc'], dtype='str')
 topics = topics.dropna()
@@ -15,12 +16,14 @@ TREC_corpus['abstract'] = TREC_corpus['abstract'].astype('str')
 
 @views.route('/')
 @views.route('/topics')
+@login_required
 def topic_overview():
         topics_overview = topics.set_index('id')
         topicsList = topics['id'].tolist()
-        return render_template('topics_overview.html', topics=topics_overview, topicsList=topicsList)
+        return render_template('topics_overview.html', topics=topics_overview, topicsList=topicsList, name=current_user.name)
 
 @views.route('/<int:topic_id>')
+@login_required
 def topic(topic_id):
         topic_description = topics['desc'][topics['id']==str(topic_id)].reset_index(drop=True)
         topic_desc = topic_description[0]
@@ -30,10 +33,11 @@ def topic(topic_id):
         for article in article_list:
                 if article not in list(set(TREC_corpus.index.values.tolist())):
                         article_list.remove(article)
-        return render_template('topic.html', topic=topic_desc, topic_id = topic_id, article_list=article_list, TREC_corpus = TREC_corpus)
+        return render_template('topic.html', topic=topic_desc, topic_id = topic_id, article_list=article_list, TREC_corpus = TREC_corpus, name=current_user.name)
 
 
 @views.route('/<int:topic_id>/<int:ref_pmid>', methods=['GET', 'POST'])
+@login_required
 def ref_article(ref_pmid, topic_id):
         topic_description = topics['desc'][topics['id']==str(topic_id)].reset_index(drop=True)
         topic_desc = topic_description[0]
@@ -48,9 +52,10 @@ def ref_article(ref_pmid, topic_id):
                         docList.remove(article)
         docList_chunked = [docList[i:i + 4] for i in range(0, len(docList), 4)] 
         
-        return render_template('ref_article.html', topic=topic_desc, topic_id=topic_id, ref_pmid=ref_pmid, title=ref_title, abstract=ref_abstract, article_list=docList_chunked, TREC_corpus = TREC_corpus)
+        return render_template('ref_article.html', topic=topic_desc, topic_id=topic_id, ref_pmid=ref_pmid, title=ref_title, abstract=ref_abstract, article_list=docList_chunked, TREC_corpus = TREC_corpus, name=current_user.name)
 
 @views.route('/<int:topic_id>/<int:ref_pmid>/<int:pmid>', methods=['GET', 'POST'])
+@login_required
 def assessment_article(pmid, ref_pmid, topic_id):
         topic_description = topics['desc'][topics['id']==str(topic_id)].reset_index(drop=True)
         topic_desc = topic_description[0]
@@ -68,7 +73,7 @@ def assessment_article(pmid, ref_pmid, topic_id):
         article_title = TREC_corpus.at[pmid, 'title']
         article_abstract = TREC_corpus.at[pmid, 'abstract']
 
-        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid, article_list=docList, TREC_corpus = TREC_corpus, n_articles=n_articles, index_active=index_active, index_previous=index_previous, index_next=index_next, percent_complete=percent_complete)
+        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid, article_list=docList, TREC_corpus = TREC_corpus, n_articles=n_articles, index_active=index_active, index_previous=index_previous, index_next=index_next, percent_complete=percent_complete, name=current_user.name)
 
 
 
