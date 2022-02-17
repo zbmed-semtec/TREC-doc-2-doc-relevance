@@ -1,6 +1,7 @@
 import pandas as pd
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
+from .models import Evaluation
 from . import db
 
 views = Blueprint('views', __name__)
@@ -54,8 +55,29 @@ def ref_article(ref_pmid, topic_id):
                 if article not in list(set(TREC_corpus.index.values.tolist())):
                         docList.remove(article)
         docList_chunked = [docList[i:i + 4] for i in range(0, len(docList), 4)] 
-        
-        return render_template('ref_article.html', topic=topic_desc, topic_id=topic_id, ref_pmid=ref_pmid, title=ref_title, abstract=ref_abstract, article_list=docList_chunked, TREC_corpus = TREC_corpus, name=current_user.name)
+         # check if there already is a evaluation score in the database:
+        try:
+                userEval = Evaluation.query.filter(
+                                                Evaluation.topic_id == topic_id,
+                                                Evaluation.ref_pmid == ref_pmid,
+                                                Evaluation.user_id == current_user.id).all()
+                evaluated_articles = []
+                for evaluations in userEval:
+                        evaluated_articles.append(evaluations.eval_pmid)
+        except: 
+                evaluated_articles = []
+        return render_template(
+                        'ref_article.html', 
+                        topic=topic_desc, 
+                        topic_id=topic_id, 
+                        ref_pmid=ref_pmid, 
+                        title=ref_title, 
+                        abstract=ref_abstract, 
+                        article_list=docList_chunked, 
+                        evaluated_articles=evaluated_articles, 
+                        TREC_corpus = TREC_corpus, 
+                        name=current_user.name
+                        )
 
 @views.route('/<int:topic_id>/<int:ref_pmid>/<int:pmid>', methods=['GET', 'POST'])
 @login_required
@@ -64,19 +86,74 @@ def assessment_article(pmid, ref_pmid, topic_id):
         topic_desc = topic_description[0]
         documents_to_asses = ref_documents['PMID to be assessed'][ref_documents['PMID reference document']==ref_pmid]
         docSet = set(documents_to_asses)
-        docList = list(docSet)
-        for article in docList:
+        article_list = list(docSet)
+        for article in article_list:
                 if article not in list(set(TREC_corpus.index.values.tolist())):
-                        docList.remove(article)
-        n_articles = len(docList)
-        index_active = docList.index(pmid)
+                        article_list.remove(article)
+        n_articles = len(article_list)
+        index_active = article_list.index(pmid)
         index_previous = index_active - 1
         index_next = index_active + 1
         percent_complete =round(((index_active+1)/n_articles)*100)
         article_title = TREC_corpus.at[pmid, 'title']
         article_abstract = TREC_corpus.at[pmid, 'abstract']
+        # check if there already is a evaluation score in the database:
+        try:
+                userEval = Evaluation.query.filter(
+                                                Evaluation.topic_id == topic_id,
+                                                Evaluation.ref_pmid == ref_pmid,
+                                                Evaluation.eval_pmid == pmid,
+                                                Evaluation.user_id == current_user.id).first()
+                eval_score = userEval.eval_score
+        except: 
+                eval_score = None
+        if request.method == "POST":
+                db.create_all()
+                if eval_score == None:
+                        eval_score = request.form.get('evaluation')
+                        evaluation = Evaluation(
+                                        topic_id=topic_id, 
+                                        ref_pmid=ref_pmid, 
+                                        eval_pmid=pmid, 
+                                        eval_score=eval_score,
+                                        user_id = current_user.id
+                                        )
+                        db.session.add(evaluation)
+                else:
+                        eval_score = request.form.get('evaluation')
+                        userEval.eval_score = eval_score
+                try:
+                        db.session.commit()
+                        return redirect(
+                                url_for(
+                                        "views.assessment_article", 
+                                        topic_id=topic_id, 
+                                        ref_pmid=ref_pmid, 
+                                        pmid=article_list[index_next]
+                                        ))
+                except Exception as error:
+                        db.session.rollback()
+                        print(error)
+                        pass
 
-        return render_template("article.html", topic=topic_desc, topic_id=topic_id, title=article_title, abstract=article_abstract, pmid=pmid, ref_pmid=ref_pmid, article_list=docList, TREC_corpus = TREC_corpus, n_articles=n_articles, index_active=index_active, index_previous=index_previous, index_next=index_next, percent_complete=percent_complete, name=current_user.name)
+
+        return render_template(
+                                "article.html", 
+                                topic=topic_desc, 
+                                topic_id=topic_id, 
+                                title=article_title, 
+                                abstract=article_abstract, 
+                                pmid=pmid, 
+                                ref_pmid=ref_pmid, 
+                                article_list=article_list,
+                                TREC_corpus = TREC_corpus, 
+                                n_articles=n_articles, 
+                                index_active=index_active, 
+                                index_previous=index_previous, 
+                                index_next=index_next, 
+                                percent_complete=percent_complete, 
+                                name=current_user.name,
+                                eval_score=eval_score)
 
 
 
