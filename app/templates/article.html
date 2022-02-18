@@ -92,22 +92,22 @@
             <div class="col-10 m-0 p-0 my-2 progress">
                 {%if evaluated_articles | length <= article_list | length%} 
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ percent_complete }}%" " aria-valuenow="{{ percent_complete }} " aria-valuemin="0 " aria-valuemax="100 ">
-						{{ evaluated_articles | length - 1}}/{{ article_list | length }}
+						{{ evaluated_articles | length}}/{{ article_list | length }}
 					</div>
 					{%else%}
 					<div class="progress-bar bg-success " role="progressbar " style="width: {{ percent_complete }}% "" aria-valuenow="{{ percent_complete }}" aria-valuemin="0" aria-valuemax="100">
-                    {{ evaluated_articles | length - 1}}/{{ article_list | length }}
+                    {{ evaluated_articles | length}}/{{ article_list | length }}
             </div>
             {%endif%}
         </div>
         <div class="col-1">
             <nav aria-label="page navigation">
                 <ul class="pagination">
-                        {%if remaining_articles | length > 0 %} <li class="page-item">
-                        <a class="page-link" href="{{ url_for('views.assessment_article', topic_id=topic_id, ref_pmid =ref_pmid, pmid= remaining_articles[0]) }}">
+                        {%if remaining_articles | length == 0 %} <li class="page-item">
+                        {%else%}
+                        <a class="page-link" href="{{ url_for('views.assessment_article', topic_id=topic_id, ref_pmid =ref_pmid, pmid=next_pmid) }}">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
-                        </li>
                         {%endif%}
                 </ul>
             </nav>

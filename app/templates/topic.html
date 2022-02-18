@@ -32,9 +32,15 @@
                         </tr>
                     </thead>
                     {%for article in article_list%}
+                    {%if article in completed_refArticles%}
+                    <tr>
+                        <td colspan="2"><a href="/{{ topic_id }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-success">{{ article }} &#9;&#9;&#9; {{ TREC_corpus.at[article, 'title'] }}</a></td>
+                    </tr>
+                    {%else%}
                     <tr>
                         <td colspan="2"><a href="/{{ topic_id }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-warning">{{ article }} &#9;&#9;&#9; {{ TREC_corpus.at[article, 'title'] }}</a></td>
                     </tr>
+                    {%endif%}
                     {%endfor%}
                 </table>
             </div>
