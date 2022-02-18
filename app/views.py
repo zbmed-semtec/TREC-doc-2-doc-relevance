@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session
 from flask_login import login_required, current_user
 from .models import Evaluation
 from . import db
@@ -33,7 +33,7 @@ def topic(topic_id):
         topic_desc = topic_description[0]
         article_list = ref_documents['PMID reference document'][ref_documents['TREC topic'] == topic_id]
         article_list = list(set(article_list))
-        # Check if article is in Trec Corpus and drop if not
+        # Check if article is in TREC Corpus and drop if not
         for article in article_list:
                 if article not in list(set(TREC_corpus.index.values.tolist())):
                         article_list.remove(article)
@@ -54,6 +54,7 @@ def ref_article(ref_pmid, topic_id):
         for article in docList:
                 if article not in list(set(TREC_corpus.index.values.tolist())):
                         docList.remove(article)
+        session['article_list'] = docList
         docList_chunked = [docList[i:i + 4] for i in range(0, len(docList), 4)] 
          # check if there already is a evaluation score in the database:
         try:
@@ -64,8 +65,10 @@ def ref_article(ref_pmid, topic_id):
                 evaluated_articles = []
                 for evaluations in userEval:
                         evaluated_articles.append(evaluations.eval_pmid)
+                session['evaluated_articles'] = evaluated_articles
         except: 
                 evaluated_articles = []
+                session['evaluated_articles'] = evaluated_articles
         return render_template(
                         'ref_article.html', 
                         topic=topic_desc, 
@@ -79,37 +82,48 @@ def ref_article(ref_pmid, topic_id):
                         name=current_user.name
                         )
 
+
 @views.route('/<int:topic_id>/<int:ref_pmid>/<int:pmid>', methods=['GET', 'POST'])
 @login_required
 def assessment_article(pmid, ref_pmid, topic_id):
         topic_description = topics['desc'][topics['id']==str(topic_id)].reset_index(drop=True)
         topic_desc = topic_description[0]
-        documents_to_asses = ref_documents['PMID to be assessed'][ref_documents['PMID reference document']==ref_pmid]
-        docSet = set(documents_to_asses)
-        article_list = list(docSet)
-        for article in article_list:
-                if article not in list(set(TREC_corpus.index.values.tolist())):
-                        article_list.remove(article)
-        n_articles = len(article_list)
+        article_list = session.get('article_list', None)
         index_active = article_list.index(pmid)
-        index_previous = index_active - 1
-        index_next = index_active + 1
-        percent_complete =round(((index_active+1)/n_articles)*100)
         article_title = TREC_corpus.at[pmid, 'title']
         article_abstract = TREC_corpus.at[pmid, 'abstract']
-        # check if there already is a evaluation score in the database:
-        try:
-                userEval = Evaluation.query.filter(
-                                                Evaluation.topic_id == topic_id,
-                                                Evaluation.ref_pmid == ref_pmid,
-                                                Evaluation.eval_pmid == pmid,
-                                                Evaluation.user_id == current_user.id).first()
-                eval_score = userEval.eval_score
-        except: 
-                eval_score = None
+        # check how many articles were already evaluated:
+        @views.before_request
+        def checkEvaluations():
+                try:
+                        userEval = Evaluation.query.filter(
+                                                        Evaluation.topic_id == topic_id,
+                                                        Evaluation.ref_pmid == ref_pmid,
+                                                        Evaluation.user_id == current_user.id).all()
+                        evaluated_articles = []
+                        for evaluations in userEval:
+                                evaluated_articles.append(evaluations.eval_pmid)
+                except: 
+                        evaluated_articles = []
+                # check if there already is a evaluation score for pmid in the database:
+                try:
+                        userEval = Evaluation.query.filter(
+                                                        Evaluation.topic_id == topic_id,
+                                                        Evaluation.ref_pmid == ref_pmid,
+                                                        Evaluation.eval_pmid == pmid,
+                                                        Evaluation.user_id == current_user.id).first()
+                        eval_score = userEval.eval_score
+                        print(eval_score)
+                except: 
+                        eval_score = None
+                remaining_articles = [pmid for pmid in article_list if pmid not in evaluated_articles]
+                return userEval, evaluated_articles, eval_score, remaining_articles
+        userEval, evaluated_articles, eval_score, remaining_articles = checkEvaluations()
+        print(evaluated_articles)
+        percent_complete =round((len(evaluated_articles)/len(article_list)*100))
+        
         if request.method == "POST":
-                db.create_all()
-                if eval_score == None:
+                if (eval_score == None) & (pmid not in evaluated_articles):
                         eval_score = request.form.get('evaluation')
                         evaluation = Evaluation(
                                         topic_id=topic_id, 
@@ -124,18 +138,31 @@ def assessment_article(pmid, ref_pmid, topic_id):
                         userEval.eval_score = eval_score
                 try:
                         db.session.commit()
-                        return redirect(
-                                url_for(
-                                        "views.assessment_article", 
-                                        topic_id=topic_id, 
-                                        ref_pmid=ref_pmid, 
-                                        pmid=article_list[index_next]
-                                        ))
+                        try:
+                                remaining_articles.remove(pmid)
+                                print(remaining_articles)
+                                next_pmid = remaining_articles[0]
+                        except:
+                                next_pmid = remaining_articles[0]
+                        if len(remaining_articles) > 0:
+                                return redirect(
+                                        url_for(
+                                                "views.assessment_article", 
+                                                topic_id=topic_id, 
+                                                ref_pmid=ref_pmid, 
+                                                pmid=next_pmid
+                                                ))
+                        else:
+                                return redirect(
+                                        url_for(
+                                                "views.ref_article", 
+                                                topic_id=topic_id, 
+                                                ref_pmid=ref_pmid
+                                                ))
                 except Exception as error:
                         db.session.rollback()
                         print(error)
                         pass
-
 
         return render_template(
                                 "article.html", 
@@ -146,11 +173,10 @@ def assessment_article(pmid, ref_pmid, topic_id):
                                 pmid=pmid, 
                                 ref_pmid=ref_pmid, 
                                 article_list=article_list,
-                                TREC_corpus = TREC_corpus, 
-                                n_articles=n_articles, 
-                                index_active=index_active, 
-                                index_previous=index_previous, 
-                                index_next=index_next, 
+                                evaluated_articles=evaluated_articles,
+                                remaining_articles=remaining_articles,
+                                TREC_corpus = TREC_corpus,
+                                index_active=index_active,
                                 percent_complete=percent_complete, 
                                 name=current_user.name,
                                 eval_score=eval_score)
