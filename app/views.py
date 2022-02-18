@@ -17,7 +17,14 @@ def home_page():
 def topic_overview():
         topics_overview = topics.set_index('id')
         topicsList = topics['id'].tolist()
-        return render_template('topics_overview.html', topics=topics_overview, topicsList=topicsList, name=current_user.name)
+        # Check which reference articles are evaluated completely
+        topicCompl = TopicCompletion.query.filter(
+                                                TopicCompletion.topic_complete == 1,
+                                                TopicCompletion.user_id == current_user.id
+                                                ).all()
+        completed_topics = [ref_article.ref_pmid for ref_article in topicCompl]
+        
+        return render_template('topics_overview.html', topics=topics_overview, topicsList=topicsList, completed_topics=completed_topics, name=current_user.name)
 
 @views.route('/<int:topic_id>')
 @login_required

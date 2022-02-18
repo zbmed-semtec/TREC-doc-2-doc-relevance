@@ -25,9 +25,15 @@
                         </tr>
                     </thead>
                     {%for topic_id in topicsList%}
+                    {%if topic in completed_topics%}
                     <tr>
-                        <td colspan="2"><a href="/{{ topic_id }}" class="list-group-item list-group-item-action">{{ topic_id }} {{ topics.at[topic_id, 'desc'] }}</a></td>
+                        <td colspan="2"><a href="/{{ topic_id }}" class="list-group-item list-group-item-action list-group-item-success">{{ topic_id }} {{ topics.at[topic_id, 'desc'] }}</a></td>
                     </tr>
+                    {%else%}
+                    <tr>
+                        <td colspan="2"><a href="/{{ topic_id }}" class="list-group-item list-group-item-action list-group-item-warning">{{ topic_id }} {{ topics.at[topic_id, 'desc'] }}</a></td>
+                    </tr>
+                    {%endif%}
                     {%endfor%}
             </div>
         </div>
