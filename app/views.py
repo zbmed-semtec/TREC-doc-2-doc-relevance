@@ -93,33 +93,29 @@ def assessment_article(pmid, ref_pmid, topic_id):
         article_title = TREC_corpus.at[pmid, 'title']
         article_abstract = TREC_corpus.at[pmid, 'abstract']
         # check how many articles were already evaluated:
-        @views.before_request
-        def checkEvaluations():
-                try:
-                        userEval = Evaluation.query.filter(
-                                                        Evaluation.topic_id == topic_id,
-                                                        Evaluation.ref_pmid == ref_pmid,
-                                                        Evaluation.user_id == current_user.id).all()
-                        evaluated_articles = []
-                        for evaluations in userEval:
-                                evaluated_articles.append(evaluations.eval_pmid)
-                except: 
-                        evaluated_articles = []
-                # check if there already is a evaluation score for pmid in the database:
-                try:
-                        userEval = Evaluation.query.filter(
-                                                        Evaluation.topic_id == topic_id,
-                                                        Evaluation.ref_pmid == ref_pmid,
-                                                        Evaluation.eval_pmid == pmid,
-                                                        Evaluation.user_id == current_user.id).first()
-                        eval_score = userEval.eval_score
-                        print(eval_score)
-                except: 
-                        eval_score = None
-                remaining_articles = [pmid for pmid in article_list if pmid not in evaluated_articles]
-                return userEval, evaluated_articles, eval_score, remaining_articles
-        userEval, evaluated_articles, eval_score, remaining_articles = checkEvaluations()
-        print(evaluated_articles)
+        try:
+                userEval = Evaluation.query.filter(
+                                                Evaluation.topic_id == topic_id,
+                                                Evaluation.ref_pmid == ref_pmid,
+                                                Evaluation.user_id == current_user.id).all()
+                evaluated_articles = []
+                for evaluations in userEval:
+                        evaluated_articles.append(evaluations.eval_pmid)
+        except: 
+                evaluated_articles = []
+        # check if there already is a evaluation score for pmid in the database:
+        try:
+                userEval = Evaluation.query.filter(
+                                                Evaluation.topic_id == topic_id,
+                                                Evaluation.ref_pmid == ref_pmid,
+                                                Evaluation.eval_pmid == pmid,
+                                                Evaluation.user_id == current_user.id).first()
+                eval_score = userEval.eval_score
+                print(eval_score)
+        except: 
+                eval_score = None
+        remaining_articles = [pmid for pmid in article_list if pmid not in evaluated_articles]
+
         percent_complete =round((len(evaluated_articles)/len(article_list)*100))
         
         if request.method == "POST":
