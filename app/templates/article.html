@@ -82,15 +82,21 @@
                 <nav aria-label="page navigation">
                     <ul class="pagination">
                         <li class="page-item">
+                            {%if index_active > 0 %} 
+                            <a class="page-link" href="{{ url_for('views.assessment_article', topic_id=topic_id, ref_pmid =ref_pmid, pmid=article_list[(index_active-1)]) }}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                            {%else%}
                             <a class="page-link" href="{{ url_for('views.ref_article', topic_id=topic_id, ref_pmid =ref_pmid) }}">
                                 <span aria-hidden="true">Overview</span>
                             </a>
+                            {%endif%}
                         </li>
                     </ul>
                 </nav>
             </div>
             <div class="col-10 m-0 p-0 my-2 progress">
-                {%if evaluated_articles | length <= article_list | length%} 
+                {%if evaluated_articles | length < article_list | length%} 
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ percent_complete }}%" " aria-valuenow="{{ percent_complete }} " aria-valuemin="0 " aria-valuemax="100 ">
 						{{ evaluated_articles | length}}/{{ article_list | length }}
 					</div>
@@ -103,12 +109,17 @@
         <div class="col-1">
             <nav aria-label="page navigation">
                 <ul class="pagination">
-                        {%if remaining_articles | length == 0 %} <li class="page-item">
-                        {%else%}
-                        <a class="page-link" href="{{ url_for('views.assessment_article', topic_id=topic_id, ref_pmid =ref_pmid, pmid=next_pmid) }}">
+                    <li class="page-item">
+                        {%if index_active < article_list | length - 1 %}
+                        <a class="page-link" href="{{ url_for('views.assessment_article', topic_id=topic_id, ref_pmid =ref_pmid, pmid=article_list[(index_active+1)]) }}">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
+                        {%else%}
+                        <a class="page-link" href="{{ url_for('views.ref_article', topic_id=topic_id, ref_pmid =ref_pmid) }}">
+                            <span aria-hidden="true">Overview</span>
+                        </a>
                         {%endif%}
+                    </li>
                 </ul>
             </nav>
         </div>
