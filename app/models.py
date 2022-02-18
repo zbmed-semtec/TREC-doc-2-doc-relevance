@@ -18,11 +18,13 @@ class Evaluation(db.Model):
 
 class RefCompletion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), unique=False)
     topic_id = db.Column(db.Integer, unique=False)
     ref_pmid = db.Column(db.Integer, unique=False)
     ref_complete = db.Column(db.Integer, unique=False)
 
 class TopicCompletion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), unique=False)
     topic_id = db.Column(db.Integer, unique=False)
     topic_complete = db.Column(db.Integer, unique=False)
