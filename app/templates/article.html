@@ -65,10 +65,15 @@
                                             Not Relevant
                                         </label>
                     </div>
+                    {%if eval_score != None%}
+                    <div class="alert alert-warning my-2" role="alert">
+                        You already evaluated this article!
+                    </div>
+                    {%endif%}
                     <div class="container" style="margin-top:1em;">
                         <div class="text-center">
                             {% if evaluated_articles | length == article_list | length %}
-                            <button type="submit" name="submit-button" value="submitted" class="btn btn-primary" style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">Submit & Complete</button>
+                            <button type="submit" name="submit-button" value="submitted" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Click to complete this reference article. Brings you back to overview." style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">Submit & Complete</button>
                             {% else %}
                             <button type="submit" name="submit-button" value="submitted" class="btn btn-primary" style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">Submit</button>
                             {% endif %}
