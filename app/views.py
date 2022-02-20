@@ -101,10 +101,8 @@ def ref_article(ref_pmid, topic_id):
         evaluated_articles = []
         for evaluations in userEval:
             evaluated_articles.append(evaluations.eval_pmid)
-        session["evaluated_articles"] = evaluated_articles
     except:
         evaluated_articles = []
-        session["evaluated_articles"] = evaluated_articles
     return render_template(
         "ref_article.html",
         topic=topic_desc,
@@ -155,7 +153,7 @@ def assessment_article(pmid, ref_pmid, topic_id):
             Evaluation.ref_pmid == ref_pmid,
             Evaluation.eval_pmid == pmid,
             Evaluation.user_id == current_user.id,
-        ).first()
+        ).first_or_404()
         eval_score = userEval.eval_score
     except:
         eval_score = None
