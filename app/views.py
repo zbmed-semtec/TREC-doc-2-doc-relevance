@@ -1,10 +1,8 @@
-from tabnanny import check
-import pandas as pd
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from flask_login import login_required, current_user
 from .models import Evaluation, RefCompletion, TopicCompletion
 from . import db
-from .static.data import TREC_corpus, topics, ref_documents
+from .static.data.data import TREC_corpus, topics, ref_documents
 
 views = Blueprint("views", __name__)
 

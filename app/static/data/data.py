@@ -1,16 +1,16 @@
 import pandas as pd
 
 topics = pd.read_csv(
-    "data/output/test_adhoc2005narrative.tsv",
+    "static/data/test_adhoc2005narrative.tsv",
     sep="\t",
     header=0,
     names=["id", "desc"],
     dtype="str",
 )
 ref_documents = pd.read_csv(
-    "data/output/topic_reference_and_documents.tsv", sep="\t", header=0
+    "static/data/topic_reference_and_documents.tsv", sep="\t", header=0
 )
-TREC_corpus = pd.read_csv("data/output/TREC_test_corpus.tsv", sep="\t", header=0)
+TREC_corpus = pd.read_csv("static/data/TREC_test_corpus.tsv", sep="\t", header=0)
 ref_documents = ref_documents[
     ref_documents["PMID to be assessed"].isin(TREC_corpus["PMID"])
 ]  # Drop all articles where we dont have a title or article
