@@ -6,34 +6,38 @@ We use the [TREC 2005 Genomics track data](https://trec.nist.gov/data/genomics/0
 - [Local copy of topics narrative](../data/input/adhoc2005narrative.txt)
 
 ## Pre-process
-For agreement and evaluation purposes, we do not need to assess every document in the collection. We are also more interested in relevant (either definitely or partially relevant) so we are focusing on those rather than the non-relevant ones which we used more as a control element (i.e., we expect non-relavant doc-2-topic documents to be also non-relevant to other documents in the same topic). We have therefore selected TREC 2005 Genomics track topics with definitely relevant doc-2-topic documents between 10 and 60, using a third of the definitely relevant doc-2-topic documents as candidates for reference documents. Steps are as follows:
+For agreement and evaluation purposes, we do not need to assess every document in the collection. We are also more interested in relevant (either definitely or partially relevant) so we are focusing on those rather than the non-relevant ones which we used more as a control element (i.e., we expect non-relavant doc-2-topic documents to be also non-relevant to other documents in the same topic). We have therefore selected TREC 2005 Genomics track topics with definitely relevant doc-2-topic documents between 10 and 80, using a 20% of the definitely relevant doc-2-topic documents as candidates for reference documents. Steps are as follows:
 - For each TREC topic, get the total numbers of non, partial and definitely doc-2-topic relevant documents
-- Keep only those topics with definitely doc-2-topic relevant documents between 10 and 60
-- Estimate the number of reference candidates as a third of the number of definitely doc-2-topic relevant documents
+- Keep only those topics with definitely doc-2-topic relevant documents between 10 and 80
+- Estimate the number of reference candidates as a 20% of the number of definitely doc-2-topic relevant documents
 
 In the following table we show the selected TREC topics for our doc-2-doc relevanc assessment task. also available as a TSV file.
-- [TSV file with selected TREC topics for our doc-2-doc relevanc assessment task](../data/input/selected_trec_topics.tsv)
+- [TSV file with selected TREC topics for our doc-2-doc relevanc assessment task](../data/output/selected_trec_topics.tsv)
 
-|	Topic	|	Non	|	Partial	|	Def	|	Reference candidates	|
+|	Topic	|	Non	|	Partial	|	Definitive|	Reference candidates	|
 |	:---:	|	:---:	|	:---:	|	:---:	|	:---:	|
-|	100	|	630	|	52	|	22	|	7	|
-|	106	|	1061	|	125	|	44	|	14	|
-|	116	|	1179	|	28	|	58	|	19	|
-|	118	|	905	|	12	|	20	|	6	|
-|	119	|	528	|	19	|	42	|	14	|
-|	121	|	380	|	25	|	17	|	5	|
-|	122	|	815	|	37	|	19	|	6	|
-|	128	|	880	|	53	|	21	|	7	|
-|	129	|	949	|	22	|	16	|	5	|
-|	137	|	1078	|	39	|	12	|	4	|
-|	139	|	345	|	20	|	15	|	5	|
-|	140	|	366	|	15	|	14	|	4	|
-|	141	|	439	|	47	|	34	|	11	|
+| 100 | 563 | 50 | 22 | 5|
+| 106 | 982 | 117 | 41 | 9|
+| 107 | 285 | 113 | 76 | 16|
+| 108 | 863 | 118 | 73 | 15|
+| 113 | 1281 | 4 | 10 | 2|
+| 116 | 1127 | 28 | 58 | 12|
+| 118 | 873 | 12 | 20 | 4|
+| 119 | 519 | 19 | 42 | 9|
+| 121 | 361 | 21 | 17 | 4|
+| 122 | 776 | 26 | 19 | 4|
+| 128 | 856 | 53 | 21 | 5|
+| 129 | 914 | 22 | 16 | 4|
+| 137 | 1041 | 38 | 12 | 3|
+| 139 | 340 | 18 | 15 | 3|
+| 140 | 344 | 15 | 14 | 3|
+| 141 | 415 | 47 | 34 | 7|
+
 
 ## Creation of a dataset ready for doc-2-doc relevance assessment
 Here we describe at a high level the steps required to create a dataset that will be later used by annotators to do the doc-2-doc relevance assessments using the reference documents.
 - For each [selected TREC topic](../data/input/selected_trec_topics.tsv), randomly select the reference documents, i.e., PMIDs, from those marked as "definitely relevant (2)" in the [TREC assessment list](../data/input/genomics.qrels.large.txt). Keep the TREC topic number so you end up with a two-column TSV file, first column for TREC topic, second column for reference PMID. Let's call this file topic_reference_pmid.tsv
-- For each reference PMID from the previous step, from the same TREC topic, randomly select 20 documents for which the relevance against the reference document will be assessed. To select those 20 documents, first randomly select 6 to 9 TREC PMIDs marked as "definitely relevant (2)" and then 6 to 9 "partially relevant (1)". Randomly select as many "non-relevant (0)" to complete the 20 documents. You will end up with a TSV file with 3 columns, first column for the TREC topic, second column for the PMID reference document, and third column for a PMID to be assessed. Let's call this file topic_reference_and_documents.tsv
+- For each reference PMID from the previous step, from the same TREC topic, randomly select 15 documents for which the relevance against the reference document will be assessed. To select those 15 documents, first randomly select 4 to 6 TREC PMIDs marked as "definitely relevant (2)" and then 4 to 6 "partially relevant (1)". Randomly select as many "non-relevant (0)" to complete the 15 documents. You will end up with a TSV file with 3 columns, first column for the TREC topic, second column for the PMID reference document, and third column for a PMID to be assessed. Let's call this file topic_reference_and_documents.tsv
 - Order the topic_reference_and_documents.tsv file by the first column, then the second and then the third. Save the order dataset using the same number.
 
 ## PMID data
