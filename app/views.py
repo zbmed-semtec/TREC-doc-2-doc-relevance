@@ -87,7 +87,7 @@ def ref_article(ref_pmid, topic_id):
     ref_title = TREC_corpus.at[ref_pmid, "title"]
     ref_abstract = TREC_corpus.at[ref_pmid, "abstract"]
     refList_chunked = [
-        ref_article_list[i : i + 4] for i in range(0, len(ref_article_list), 4)
+        ref_article_list[i : i + 3] for i in range(0, len(ref_article_list), 3)
     ]
     # check if there already is a evaluation score in the database:
     try:
