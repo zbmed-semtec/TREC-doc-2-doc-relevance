@@ -1,0 +1,58 @@
+a {
+    color:#cc0824
+}
+a:hover{
+    color:#ee7f00
+}
+.breadcrumb-item + .breadcrumb-item:before {
+    color: #ee7f00;
+  }
+.btn-primary{
+    background: #cc0824;
+    border-color: #cc0824;
+}
+.btn-primary:hover{
+    background: #ee7f00;
+    border-color: #ee7f00;
+    color: #ffff;
+}
+.btn-outline-primary{
+    background: #ffff;
+    border-color: #cc0824;
+    color: #cc0824;
+}
+.btn-outline-primary:hover{
+    background: #ee7f00;
+    border-color: #ee7f00;
+    color: #ffff;
+}
+.form-check{
+    border-radius: .24em;
+    background-color:#f6f6f6;
+    backg
+    margin:auto;
+}
+.form-check:hover{
+    border-radius: .24em;
+    background-color: #4b4b4d;
+    color: #ffff
+}
+.form-check-input:checked {
+    background-color: #cc0824;
+    border-color: #cc0824;
+}
+.page-item .page-link{
+    color:#cc0824;
+    border-color:#cc0824;
+}
+.progress-bar{
+    background-color: #cc0824;
+}
+#form-mid {
+    background-color: #ffff;
+}
+#form-mid:hover {
+    border-radius: .24em;
+    background-color: #4b4b4d;
+    color: #ffff
+}

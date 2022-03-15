@@ -1,0 +1,49 @@
+{% extends 'base_layout.html' %}
+
+<!-- Block Content for head -->
+{% block head_content %}
+<meta name="description" content="Topic Page"> {% endblock %}
+
+<!-- Block Content for body -->
+{% block content %}
+<main>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/topics">Topics Overview</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Current Topic: {{ topic_id }}</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="well well-lg" style="background: #f6f6f6; border-radius:0.5em; padding: .5em; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
+            <h3 align="center"><b>Topic:</b> {{ topic }} </h3>
+        </div>
+    </div>
+    <div class="container" style="margin-top:1.5em; padding: .5em;">
+        <div class="row">
+            <div class="col-11" style="border-style:solid; border-color: #ee7f00; border-width: 2px; border-radius:0.5em; margin:auto; padding: .8em; box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);">
+                <p align="center"><em><strong>List of {{ article_list | length }} reference articles for Topic ID:{{ topic_id }}</strong></em></p>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">PMID</th>
+                            <th scope="col">Title</th>
+                        </tr>
+                    </thead>
+                    {%for article in article_list%}
+                    {%if article in completed_refArticles%}
+                    <tr>
+                        <td colspan="2"><a href="/{{ topic_id }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-success">{{ article }} &#9;&#9;&#9; {{ TREC_corpus.at[article, 'title'] }}</a></td>
+                    </tr>
+                    {%else%}
+                    <tr>
+                        <td colspan="2"><a href="/{{ topic_id }}/{{ article }}" class="list-group-item list-group-item-action list-group-item-warning">{{ article }} &#9;&#9;&#9; {{ TREC_corpus.at[article, 'title'] }}</a></td>
+                    </tr>
+                    {%endif%}
+                    {%endfor%}
+                </table>
+            </div>
+        </div>
+</main>
+{% endblock %}
