@@ -4,7 +4,7 @@ Skills you would need before using this repo as a docker image
 - Basic knowledge on docker as a user, i.e., you do not need to know how to create images but how to build and use an instance. [More information about docker](https://docs.docker.com/)
 - Basic knowledge on Git or a desktop client version, e.g., [GitHub desktop](https://desktop.github.com/)
 
-Before you start:
+## Before you start:
 - This repository should be already cloned and locally available in your computer
   - You can clone it via command line `git clone https://github.com/zbmed-semtec/TREC-doc-2-doc-relevance`
   - You can also use the [GitHub desktop](https://desktop.github.com/)
@@ -42,7 +42,7 @@ Server: Docker Desktop 4.5.1 (74721)
   GitCommit:        de40ad0
   ```
 
-Building the instance
+## Building the instance
 You will need to do this only once. If docker is up and running enter the following into your console:
 1. Go to the app folder `cd TREC-doc-2-doc-relevance/app`
 2. Create the image with `docker build -t app .`
@@ -54,7 +54,7 @@ To copy the database from the container, follow the given steps:
 2. Open the command terminal in the given directory.
 3. For the container name "test", insert the given command `docker cp test:/app/db.sqlite .`
 
-Using the instance
+## Using the instance
 If you already created the instance you can use it at any time
 1. Start the instance using ```docker start test``` (you do not need to do this if you just created the instance, see above, as it will be running already)
 2. Visit `http://127.0.0.1:5001` in your browser and add your relevance assessments
