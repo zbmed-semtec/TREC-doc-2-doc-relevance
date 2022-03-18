@@ -44,7 +44,7 @@ Server: Docker Desktop 4.5.1 (74721)
 
 ## Building the instance
 You will need to do this only once. If docker is up and running enter the following into your console:
-1. Go to the app folder `cd TREC-doc-2-doc-relevance/app`
+1. Go to the app folder `cd TREC-doc-2-doc-relevance`
 2. Create the image with `docker build -t app .`
 3. Run the image in "test" container with: `docker run -d -p 5001:5000 --name test app`
 4. Visit `http://127.0.0.1:5001` in your browser and the app should run.
