@@ -17,11 +17,11 @@ def home_page():
 def topic_overview():
     topics_overview = topics.set_index("id")
     topicsList = topics["id"].tolist()
-    # Check which reference articles are evaluated completely
+    # Check which topics are evaluated completely
     topicCompl = TopicCompletion.query.filter(
         TopicCompletion.topic_complete == 1, TopicCompletion.user_id == current_user.id
     ).all()
-    completed_topics = [ref_article.ref_pmid for ref_article in topicCompl]
+    completed_topics = [topics.topic_id for topics in topicCompl]
 
     return render_template(
         "topics_overview.html",
@@ -48,17 +48,26 @@ def topic(topic_id):
         RefCompletion.ref_complete == 1, RefCompletion.user_id == current_user.id
     ).all()
     completed_refArticles = [ref_article.ref_pmid for ref_article in refCompl]
-    if completed_refArticles == article_list:
-        addTopicCompletion = TopicCompletion(
-            topic_id=topic_id, user_id=current_user.id, topic_complete=1
-        )
-        db.session.add(addTopicCompletion)
-        try:
-            db.session.commit()
-        except Exception as error:
-            db.session.rollback()
-            print(error)
-            pass
+
+    if set(article_list).issubset(completed_refArticles):
+        # Check which topics are evaluated completely
+        topicCompl = TopicCompletion.query.filter(
+            TopicCompletion.topic_complete == 1, TopicCompletion.user_id == current_user.id
+        ).all()
+        completed_topics = [topics.topic_id for topics in topicCompl]
+
+        # Check if topic is already in the database. Add if not found
+        if topic_id not in completed_topics:
+            addTopicCompletion = TopicCompletion(
+                topic_id=topic_id, user_id=current_user.id, topic_complete=1
+            )
+            db.session.add(addTopicCompletion)
+            try:
+                db.session.commit()
+            except Exception as error:
+                db.session.rollback()
+                print(error)
+                pass
     return render_template(
         "topic.html",
         topic=topic_desc,
