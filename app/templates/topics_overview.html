@@ -24,8 +24,7 @@
                             <th scope="col">Description</th>
                         </tr>
                     </thead>
-                    {%for topic_id in topicsList%}
-                    {%if topic in completed_topics%}
+                    {%for topic_id in topicsList%} {%if topic_id|int in completed_topics%}
                     <tr>
                         <td colspan="2"><a href="/{{ topic_id }}" class="list-group-item list-group-item-action list-group-item-success">{{ topic_id }} {{ topics.at[topic_id, 'desc'] }}</a></td>
                     </tr>
@@ -33,8 +32,7 @@
                     <tr>
                         <td colspan="2"><a href="/{{ topic_id }}" class="list-group-item list-group-item-action list-group-item-warning">{{ topic_id }} {{ topics.at[topic_id, 'desc'] }}</a></td>
                     </tr>
-                    {%endif%}
-                    {%endfor%}
+                    {%endif%} {%endfor%}
             </div>
         </div>
 </main>
