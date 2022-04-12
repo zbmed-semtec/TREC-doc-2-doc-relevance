@@ -34,7 +34,7 @@ To install setup.py:
 ## Deployment
 
 These instructions are for deployment without the use of docker, if you're planning to deploy this project using docker,
-please follow the steps described at `docker-img/READM.md`.
+please follow the steps described at `docker-img/README.md`.
 
 The guide assumes that the VM used for deployment is correctly configured and accessible from a port such as HTTP or HTTPS.
 
