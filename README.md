@@ -1,3 +1,5 @@
+  [![DOI](https://zenodo.org/badge/451905367.svg)](https://zenodo.org/badge/latestdoi/451905367)
+  
 # TREC-doc-2-doc-relevance
 The code, data and docs at this repo aim at facilitating the creation of a doc-2-doc relevance assessment on PMIDs used in the TREC 2005 Genomics track. A doc-2-doc relevance assessment takes one document as reference and assess a second document regarding its relevance to the reference one. This doc-2-doc collection will be used to evaluate the doc-2-doc recommendations approaches that we are working on.
 
@@ -21,5 +23,17 @@ Our final output is a doc-2-doc relevance assesment corpus corresonding to a TSV
 - Assessed PMID
 - Relevance assessment (2 definitely relevant, 1 partially relevant, 0 non-relevant)
 
+# Citation
+If you want to cite this repository please get the citation data for the corresponding release in [Zenodo](https://zenodo.org/record/7341391).
 
+If you want to cite the data used in our doc-2-doc relevance assessment, you an find the corresponding [dataset in Zenodo](https://zenodo.org/record/7324822).
+  
+If you want to cite the data for the Fleiss Kappa analysis, it is also [available in Zenodo](https://zenodo.org/record/7338056).
+  
+The contribution to this repository has been as follows:
+* Muhammad Talha is the main developer of this repository
+* Lukas Geist and Tim Fellerhoff contributed to the extraction of titles and abstracts used in the corpus
+* Rohitha Ravinder and Leyla Jael Castro contributed to the data pre-processing to obtain the assessment crorpus
+* Olga Giraldo contributed to testing and validation of the interface
+* Dietrich Rebholz-Schumann and Leyla Jael Castro conceptualized this work
 
