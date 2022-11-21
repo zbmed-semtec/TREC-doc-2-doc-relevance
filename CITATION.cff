@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Talha"
+  given-names: "Mohammad"
+- family-names: "Geist"
+  given-names: "Lukas"
+- family-names: "Fellerhof"
+  given-names: "Tim"
+- family-names: "Ravinder"
+  given-names: "Rohitha"
+- family-names: "Giraldo"
+  given-names: "Olga"
+  orcid: "http://orcid.org/0000-0003-2978-8922"
+- family-names: "Rebholz-Schuhmann"
+  given-names: "Dietrich"
+  orcid: "http://orcid.org/0000-0002-1018-0370"
+- family-names: "Castro"
+  given-names: "Leyla Jael"
+  orcid: "http://orcid.org/0000-0003-3986-0510"
+title: "My Research Software"
+version: 1.0.0
+date-released: 2022-11-21
+url: "https://github.com/zbmed-semtec/TREC-doc-2-doc-relevance"
