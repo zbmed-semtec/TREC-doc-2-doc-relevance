@@ -21,4 +21,5 @@ authors:
 title: "My Research Software"
 version: 1.0.0
 date-released: 2022-11-21
+doi: 10.5281/zenodo.7341391
 url: "https://github.com/zbmed-semtec/TREC-doc-2-doc-relevance"
